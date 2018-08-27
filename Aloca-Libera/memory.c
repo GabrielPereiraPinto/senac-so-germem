@@ -52,7 +52,7 @@ void Libera(void *ponteiro){
     }
 }
 
-void Print(){
+void PrintMap(){
     for (int i = 0; i < SIZE ; i++){
         printf("%c", map[i]);       
     }

@@ -9,4 +9,4 @@ void *Aloca(unsigned int nbytes);
 void Libera(void *ponteiro);
 void InitMap();
 
-int map[SIZE];
+uint8_t map[SIZE];

@@ -12,23 +12,24 @@ typedef struct ListControl
     int size;
 } List;
 
-void initList(List *lista);
-listBlock *aloc(listBlock *novo_elemento, void *data);
+void initList(List *list);
 
-int InsertEmptyList(List *lista, void *data);
+listBlock *aloc(listBlock *new, void *data);
 
-int InsertStartList(List *lista, void *data);
+int InsertEmptyList(List *list, void *data);
 
-int InsertEndList(List *lista, void *data);
+int InsertStartList(List *list, void *data);
 
-int InsertAfter(List *lista, void *data, int pos);
+int InsertEndList(List *list, void *data);
 
-int InsertBefore(List *lista, void *data, int pos);
+int InsertAfter(List *list, void *data, int position);
 
-int Remove(List *lista, int pos);
+int InsertBefore(List *list, void *data, int position);
 
-void ShowList(List *lista);
+int Remove(List *list, int position);
 
-void ShowListReverse(List *lista);
+void ShowList(List *list);
 
-void ShatterList(List *lista);
+void ShowListReverse(List *list);
+
+void ShatterList(List *list);

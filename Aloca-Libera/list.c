@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
+#include "memory.h"
 
 void *Aloca(unsigned int nbytes);
 void Libera(void *ponteiro);
@@ -66,7 +67,7 @@ int InsertEndList(List *list, void *data)
     return 0;
 }
 
-int InsertAfter(List *list, void *data, int pos)
+int InsertAfter(List *list, void *data, int position)
 {
     int i;
     listBlock *new = Aloca(sizeof(listBlock)), *temp = Aloca(sizeof(listBlock));
@@ -75,7 +76,7 @@ int InsertAfter(List *list, void *data, int pos)
         return -1;
     new->data = data;
     temp = list->start;
-    for (i = 1; i < pos; ++i)
+    for (i = 1; i < position; ++i)
         temp = temp->after;
     new->after = temp->after;
     new->before = temp;
@@ -88,7 +89,7 @@ int InsertAfter(List *list, void *data, int pos)
     return 0;
 }
 
-int InsertBefore(List *list, void *data, int pos)
+int InsertBefore(List *list, void *data, int position)
 {
     int i;
     listBlock *new = Aloca(sizeof(listBlock)), *temp = Aloca(sizeof(listBlock));
@@ -97,7 +98,7 @@ int InsertBefore(List *list, void *data, int pos)
         return -1;
     new->data = data;
     temp = list->start;
-    for (i = 1; i < pos; ++i)
+    for (i = 1; i < position; ++i)
         temp = temp->after;
     new->after = temp;
     new->before = temp->before;
@@ -110,7 +111,7 @@ int InsertBefore(List *list, void *data, int pos)
     return 0;
 }
 
-int Remove(List *list, int pos)
+int Remove(List *list, int position)
 {
     int i;
     listBlock *removeBlock, *temp;
@@ -118,7 +119,7 @@ int Remove(List *list, int pos)
     if (list->size == 0)
         return -1;
 
-    if (pos == 1)
+    if (position == 1)
     {
         removeBlock = list->start;
         list->start = list->start->after;
@@ -127,7 +128,7 @@ int Remove(List *list, int pos)
         else
             list->start->before = NULL;
     }
-    else if (pos == list->size)
+    else if (position == list->size)
     {
         removeBlock = list->end;
         list->end->before->after = NULL;
@@ -136,7 +137,7 @@ int Remove(List *list, int pos)
     else
     {
         temp = list->start;
-        for (i = 1; i < pos; ++i)
+        for (i = 1; i < position; ++i)
             temp = temp->after;
         removeBlock = temp;
         temp->before->after = temp->after;

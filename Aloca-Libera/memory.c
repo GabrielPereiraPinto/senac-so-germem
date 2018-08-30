@@ -1,36 +1,43 @@
 #include "memory.h"
 
-void initMap(){
-    for (int i = 0; i<SIZE; i++){
+void initMap()
+{
+    for (int i = 0; i < SIZE; i++)
+    {
         map[i] = '0';
     }
 }
 
-void *Aloca(unsigned int nbytes){
+void *Aloca(unsigned int nbytes)
+{
 
-    nbytes++ ;
-    bool open = false ;
-    int *posicao = malloc( sizeof( int) );
-    *posicao = 0;    
+    nbytes++;
+    bool open = false;
+    int *posicao = malloc(sizeof(int));
+    *posicao = 0;
 
-    for (int i = 0; i < SIZE ; i++){
-        
-        if ( map[i] == '|'){
+    for (int i = 0; i < SIZE; i++)
+    {
+
+        if (map[i] == '|')
+        {
             open = false;
             continue;
         }
-        else if (map[i] == 'F'){
+        else if (map[i] == 'F')
+        {
             open = true;
-            *posicao = i + 1 ;
+            *posicao = i + 1;
             continue;
         }
 
-        if (open && (i - (unsigned int)*posicao == nbytes) ){
-            map[i] = 'F'; 
+        if (open && (i - (unsigned int)*posicao == nbytes))
+        {
+            map[i] = 'F';
             map[*posicao] = '|';
 
             *posicao = *posicao + 1;
-            return (void *) posicao;
+            return (void *)posicao;
         }
     }
 
@@ -38,13 +45,16 @@ void *Aloca(unsigned int nbytes){
     return NULL;
 }
 
-void Libera(void *ponteiro){
+void Libera(void *ponteiro)
+{
 
-    int *temp = (int*)ponteiro - 1;
+    int *temp = (int *)ponteiro - 1;
 
-    for (int i = *temp; i < SIZE; i++){
+    for (int i = *temp; i < SIZE; i++)
+    {
 
-        if (map[i] == 'F'){
+        if (map[i] == 'F')
+        {
             map[i] = '0';
             map[*temp] = '0';
             break;
@@ -52,9 +62,11 @@ void Libera(void *ponteiro){
     }
 }
 
-void PrintMap(){
-    for (int i = 0; i < SIZE ; i++){
-        printf("%c", map[i]);       
+void PrintMap()
+{
+    for (int i = 0; i < SIZE; i++)
+    {
+        printf("%c", map[i]);
     }
     printf("\n");
 }

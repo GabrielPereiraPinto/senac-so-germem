@@ -23,7 +23,7 @@ void shell_loop (void){
         printf("> ");
 
         linha = shell_read();
-        args = shell_split();
+        args = shell_split(linha);
         loop_status = shell_exec(args);
 
         free(linha);

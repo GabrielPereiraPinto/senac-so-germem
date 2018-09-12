@@ -11,11 +11,34 @@
 #define SHELL_COMANDO_BUFFER_TAMANHO 64
 #define SHELL_COMANDO_DELIMITACAO " \t\r\n\a"
 
+
+// ------------------------COMANDOS--------------------
 #define HELP    "hlp"
 #define CHANGE  "cgd"
 #define LIST    "lst"
 #define MAKE    "mkd"
 #define REMOVE  "rmv"
+#define EXIT    "ext"
+
+void shell_loop (void);
+char *shell_read(void);
+char ** shell_split(char *linha);
+
+int shell_hlp(char **args);
+int shell_cgd(char **args);
+int shell_ext(char **args);
+
+char *builtin_comandos[]{
+    HELP,
+    CHANGE,
+    EXIT
+}
+
+int (*buitin_funcoes[]) (char **) ={
+    &shell_hlp,
+    &shell_cgd,
+    &shell_ext
+}
 
 
 int main (int argc, char **argv){
@@ -25,13 +48,14 @@ int main (int argc, char **argv){
     return 0;
 }
 
+// ------------------------METODOS BASE--------------------
 void shell_loop (void){
 
     char *linha;
     char **args;
     int loop_status;
 
-    printf ("Bem vindo ao Shell, para ajuda digite hlp. \n");
+    printf ("Para ajuda digite hlp ... \n");
     do{
         printf("> ");
 
@@ -119,7 +143,7 @@ char ** shell_split(char *linha){
     return comandos;
 }
 
-int shell_lanch(char **args){
+int shell_launch(char **args){
     
     pid_t process_id, wait_id;
     int status;
@@ -147,4 +171,44 @@ int shell_lanch(char **args){
     }
 
     return 1;
+}
+
+
+// ------------------------METODOS DOS COMANDOS--------------------
+
+int shell_num_builtins(){
+    return sizeof(builtin_comandos) / sizeof(char *);
+}
+
+int shell_cgd(char **args){
+
+    if (args[1] == NULL)
+        fprintf(stderr, "Shell: Esperado argumento para \"cgd\" \n ");
+
+    else{
+        if (chdir(args[1]) != 0)
+        perror("shell");
+    }
+
+    return 1;
+}
+
+int shell_hlp(char **args){
+
+    printf("Bem vindo ao Shell \n");
+    printf("Criado por Gabriel Pereira Pinto \n");
+    printf("Digite o comando desejado e seus argumentos, depois precionse enter \n");
+    printf("Existem os seguintes comandos: \n");
+
+    printf("hlp - HELP - ajuda \n");
+    printf("cgd - CHANGE DIRECTORY - mudar o diretorio\n");
+    printf("lst - LIST - listar arquivos no diretorio");
+    printf("mkd - MAKE DIRECTORY - criar um diretorio");
+    printf("rmv - REMOVE - remover arquivo");
+    printf("ext - EXIT - sair do shell");
+
+}
+
+int shell_ext(char **args){
+    return 0;
 }

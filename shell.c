@@ -64,7 +64,7 @@ char *shell_read(void){
             buffer = realloc(buffer, buffer_tamanho);
 
             if(!buffer){
-                fprintf(stderr, "Shell: Erro de Alocação - buffer realoc");
+                fprintf(stderr, "Shell: Erro de Alocação - buffer realloc");
                 exit(1);
             }
         }
@@ -83,8 +83,25 @@ char ** shell_split(char *linha){
     }
 
     comando = strtok(linha, SHELL_COMANDO_DELIMITACAO);
-    
+    int posicao = 0;
     while (comando != NULL){
-        comandos
+        comandos[posicao] = comando;
+
+        posicao++;
+
+        if(posicao >= buffer_tamanho){
+            buffer_tamanho += SHELL_COMANDO_BUFFER_TAMANHO;
+            comandos = realloc(comandos, sizeof(char) * buffer_tamanho);
+
+            if (!comandos){
+                fprintf(stderr, "Shell: Erro de Alocação - comandos realloc");
+                exit(1);
+            }
+        }
+        
+        comando = strtok(NULL, SHELL_COMANDO_DELIMITACAO);
     }
+
+    comandos[posicao] = NULL;
+    return comandos;
 }

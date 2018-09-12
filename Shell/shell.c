@@ -1,10 +1,22 @@
 #include <stdio.h>
-#include <corecrt_wstdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
+#include <corecrt_wstdio.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <string.h>
 
 #define SHELL_READ_BUFFER_TAMANHO 1024;
 #define SHELL_COMANDO_BUFFER_TAMANHO 64
 #define SHELL_COMANDO_DELIMITACAO " \t\r\n\a"
+
+#define HELP    "hlp"
+#define CHANGE  "cgd"
+#define LIST    "lst"
+#define MAKE    "mkd"
+#define REMOVE  "rmv"
+
 
 int main (int argc, char **argv){
 
@@ -19,6 +31,7 @@ void shell_loop (void){
     char **args;
     int loop_status;
 
+    printf ("Bem vindo ao Shell, para ajuda digite hlp. \n");
     do{
         printf("> ");
 
@@ -39,7 +52,7 @@ char *shell_read(void){
 
     if(!buffer){
         fprintf(stderr, "Shell: Erro de alocação - buffer");
-        exit (1);
+        exit (-1);
     }
     
     int caracter;    
@@ -65,7 +78,7 @@ char *shell_read(void){
 
             if(!buffer){
                 fprintf(stderr, "Shell: Erro de Alocação - buffer realloc");
-                exit(1);
+                exit(-1);
             }
         }
     }
@@ -95,7 +108,7 @@ char ** shell_split(char *linha){
 
             if (!comandos){
                 fprintf(stderr, "Shell: Erro de Alocação - comandos realloc");
-                exit(1);
+                exit(-1);
             }
         }
         
@@ -104,4 +117,34 @@ char ** shell_split(char *linha){
 
     comandos[posicao] = NULL;
     return comandos;
+}
+
+int shell_lanch(char **args){
+    
+    pid_t process_id, wait_id;
+    int status;
+
+    process_id = fork();
+
+    if (process_id == 0){ //processo filho
+        if(execvp(args[0], args) == -1){
+            perror("shell");
+        }
+
+        exit(-1);
+    }
+
+    else if (process_id < 0){ //erro no fork
+        perror("shell");
+    }
+
+    else { //processo pai
+        do{
+            wait_id = wait_process_id(process_id, &status, WUNTRACED);
+        }
+
+        while (!WIFEXITED(status) && !WIFSIGNALED(status));
+    }
+
+    return 1;
 }
